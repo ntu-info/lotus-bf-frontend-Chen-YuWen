@@ -61,9 +61,9 @@ export default function App () {
       {/* Inline style injection to enforce no-hover look */}
       <style>{`
         :root {
-          --primary-600: #2563eb;
-          --primary-700: #1d4ed8;
-          --primary-800: #1e40af;
+          --primary-600: #3778b0;
+          --primary-700: #3778b0;
+          --primary-800: #3778b0;
           --border: #e5e7eb;
         }
         .app { padding-right: 0 !important; }
@@ -146,10 +146,19 @@ export default function App () {
         }
       `}</style>
 
-      <header className="app__header">
-        <h1 className="app__title">LoTUS-BF</h1>
-        <div className="app__subtitle">Location-or-Term Unified Search for Brain Functions</div>
+      <header className="hero-banner">
+        <div className="hero-content">
+          <h1 className="hero-title text-4xl tracking-tight">
+            NeuroBridge
+          </h1>
+          <p className="hero-subtitle text-lg">
+            Where neuroscience meets meaning.
+          </p>
+        </div>
+        <div className="hero-divider"></div>
       </header>
+
+
 
       <main className="app__grid" ref={gridRef}>
         <section className="card" style={{ flexBasis: `${sizes[0]}%` }}>

@@ -1,17 +1,58 @@
-
-/* App.css baseline (hoverless look is enforced inline in App.jsx too) */
-:root {
-  --bg: #fafafa;
-  --fg: #111827;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --radius: 14px;
-  --primary-600: #2563eb;
-  --btn-font-size: 12px;
-  --btn-py: 6px;
-  --btn-px: 10px;
-  --btn-radius: 8px;
+/* 統一搜尋框樣式：圓角灰框 */
+.searchbox {
+  max-width: 100%;
+  border: 2px solid var(--border) !important; 
+  border-radius: 12px !important;            
+  background: #fff;
+  font-size: 15px;
+  color: #1e293b;
+  /* 更柔和的內陰影 */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06); 
+  transition: all 0.9s;
+  padding: 10px 20px;
 }
+.searchbox:focus {
+  border-color: var(--primary-600) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); 
+}
+
+/* App.css baseline */
+:root {
+  --bg: #f9fafb;             
+  --fg: #1f2937;             
+  --border: #e5e7eb;          
+  --card-bg: #ffffff;
+  --primary-600: #134b5f;
+  --primary-700: #165a72;
+  --primary-800: #0f3c4c;
+  --radius: 12px;
+  --muted: #6b7280;
+}
+
+/* 頁面整體背景 */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  overflow-x: hidden; 
+}
+
+/* 卡片樣式 */
+.card {
+  background: var(--card-bg);
+  border: 10px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 5px 15px rgba(0, 0, 0, 0.05); 
+  transition: all 0.25s ease;
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.08); 
+}
+
 
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
@@ -25,44 +66,73 @@ body {
 .app {
   max-width: none;
   margin: 0;
-  padding: 18px 0 18px 18px;
+  padding: 18px; 
+  overflow-x: hidden; /* 確保 app 容器本身沒有水平溢出 */
 }
 
-.app__header { margin-bottom: 14px; }
-.app__title { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: .2px; }
-.app__subtitle { margin-top: 4px; color: var(--muted); font-size: 13px; }
+.app__header { margin-bottom: 8px; }
+.app__title { margin: -5; font-size: 20px; font-weight: 800; letter-spacing: .2px; }
+.app__subtitle { margin-top: 8px; color: var(--muted); font-size: 13px; }
 
-.app__grid { display: flex; gap: 0; width: 100%; }
+.app__grid {
+  display: flex;
+  gap: 1px;
+  width: 100%; 
+  max-width: 100%; 
+  overflow-x: hidden;
+}
 .app__grid > .card { flex: 1 1 0; min-width: 240px; overflow: auto; }
 
 .resizer { width: 8px; cursor: col-resize; position: relative; user-select: none; touch-action: none; align-self: stretch; background: transparent; }
 .resizer::after { content:''; position:absolute; top:0; bottom:0; left:3px; width:2px; background: var(--border); transition: background .15s ease; }
 .resizer:hover::after { background: #9ca3af; }
 
-.card { background:white; border:1px solid var(--border); border-radius: var(--radius); padding:12px; }
-.card__title { font-weight:600; margin-bottom:10px; }
-.card--stack > .divider { height:1px; background:var(--border); margin:12px 0; }
+.card { background:white; border:3px solid var(--border); border-radius: var(--radius); padding:15px; }
+/* 標題 */
+.card__title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--fg);
+  margin-bottom: 6px;
+  letter-spacing: normal;
+}
+
+.card--stack > .divider { height:1px; background:var(--border); margin:12px; }
+
+.card--stack .rounded-2xl {
+  margin-bottom: 24px; 
+}
+.card--stack .rounded-2xl:last-child {
+  margin-bottom: 0;
+}
 
 .hint { margin-top: 8px; color: var(--muted); font-size: 12px; }
 .hint__code { background:#f3f4f6; padding:2px 6px; border-radius:8px; }
 
-/* Downsized buttons (no hover/active change) */
-button, .btn, [role="button"], .button {
-  background: var(--primary-600);
-  color:#fff;
-  border:none;
-  border-radius: var(--btn-radius);
-  padding: var(--btn-py) var(--btn-px);
-  font-weight:600;
-  font-size: var(--btn-font-size);
-  line-height:1.1;
-  cursor:pointer;
+.qb-logic-btn {
+  margin-left: 6px;
+  margin-right: 6px;
+  min-width: 56px;
+  /* 繼承品牌色，但使用更柔和的樣式 */
+  background: #e0f2f1 !important; /* 淺色背景 */
+  color: var(--primary-700) !important; /* 深色文字 */
+  border: 1px solid var(--primary-600) !important;
+  box-shadow: none; /* 移除陰影 */
+  transition: all 0.2s;
+  font-size: 8rem !important;
+  font-weight: 700 !important;
 }
-button:hover, .btn:hover, [role="button"]:hover, .button:hover,
-button:active, .btn:active, [role="button"]:active, .button:active {
-  background: var(--primary-600);
-  color: #fff;
+.qb-logic-btn:hover {
+  background: #b2dfdb !important;
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
+.qb-logic-btn:active {
+  background: var(--primary-800) !important; /* 按下時變成深綠色 */
+  color: white !important;
+  transform: scale(0.98);
+}
+
 button:disabled, .btn:disabled { opacity:.55; cursor:not-allowed; }
 
 .card input[type="text"],
@@ -85,20 +155,326 @@ button:disabled, .btn:disabled { opacity:.55; cursor:not-allowed; }
   width: 100%;
   max-width: 100%;
   display: block;
-  padding: 8px 12px;
+  padding: 10px 22px;
   border: 1px solid var(--border);
   border-radius: 12px;
   outline: none;
 }
 
 .qb__input:focus {
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
 }
 
 
-/* Ensure QueryBuilder input doesn't collapse too narrow */
+/* 修正：移除對 .qb__input 最小寬度的強制限制，讓 flex-grow 生效 */
 .qb { width: 100%; }
-.qb__input { width: 100%; min-width: 420px; }
+.qb__input { width: 100%; } /* 移除 min-width: 420px; */
 @media (min-width: 1024px) {
-  .qb__input { min-width: 640px; }
+  .qb__input { width: 100%; } /* 移除 min-width: 640px; */
+}
+
+
+/* === Unified Brand Buttons (Green Theme) === */
+button,
+.btn,
+[role="button"],
+.button {
+  background-color: var(--primary-600) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important; 
+  padding: 8px 14px !important; 
+  font-weight: 1000 !important;
+  font-size: 140rem !important;
+  line-height: 1.5 !important; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1)!important; 
+  transition: all 0.2s ease!important;
+}
+button:hover,
+.btn:hover,
+[role="button"]:hover,
+.button:hover {
+  background-color: var(--primary-700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+button:active,
+.btn:active,
+[role="button"]:active,
+.button:active {
+  background-color: var(--primary-800);
+  transform: scale(0.98);
+}
+button:disabled,
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* === Force override for Studies page === */
+.studies-card {
+  background-color: #d3eaf2 !important;
+  border-radius: 1.2rem !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
+  padding: 1rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.studies-card:hover {
+  background-color: #b8e1ee !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
+}
+
+.studies-card-title {
+  color: #000 !important;        /* 黑色標題 */
+  font-size: 1.2rem !important;  /* 放大 */
+  font-weight: 900 !important;
+  line-height: 1.4 !important;
+}
+
+.studies-card-meta,
+.studies-card-authors,
+.studies-card-footer {
+  color: #6b7280 !important;     /* 灰色文字 */
+}
+
+/* === Card spacing for Studies.jsx === */
+.studies-card {
+  margin-bottom: 2rem !important;  /* 每張卡片之間的間距 32px */
+}
+
+.studies-card:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* === NeuroBridge heading === */
+.hero-title {
+  font-style: italic;      
+  font-weight: 800;
+  color: #1f2937;          
+  text-align: center;
+}
+
+/* === Full-width Hero Banner (Diagonal Gradient, Deep Blue Text) === */
+.hero-banner {
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg,
+    #d3eaf2 0%,
+    #bee0ec 15%,
+    #a8d5e5 30%,
+    #92cbdf 45%,
+    #7cc0d8 60%,
+    #51abcb 75%,
+    #2596be 100%);
+  padding: 36px 0 36px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 中央文字區 */
+.hero-content {
+  display: inline-block;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+}
+
+/* 主標題 */
+.hero-title {
+  font-style: italic;
+  font-weight: 800;
+  color: #0f1d4c;  
+  margin: 0;
+  margin-top: 0px;
+}
+
+/* 副標題 */
+.hero-subtitle {
+  font-style: italic;
+  font-weight: 600;
+  color: #0f1d4c;  
+  margin-top: 8px;
+}
+
+/* 底部分隔線 */
+.hero-divider {
+  width: 60%;
+  height: 4px;
+  background: #0f1d4c;
+  border-radius: 2px;
+  margin: 0px auto 0 auto;
+}
+
+
+
+/* === NIfTI Viewer Section Styling === */
+.viewer-label {
+  background: #f1f5f9;           
+  color: #0f3c4c;                
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  width: fit-content;
+}
+
+.viewer-canvas {
+  height: 10rem;
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+  background: #000;
+  cursor: crosshair;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.viewer-canvas:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(37,150,190,0.4);
+}
+
+/* 強制 NIfTI Viewer 輸入區塊之間拉開距離 */
+.card .flex.items-center.gap-2.w-full {
+  margin-bottom: 1rem !important; /* 約20px */
+}
+
+.card .rounded-xl.border.p-3.text-sm > .flex.items-center.gap-2.w-full:first-of-type {
+  margin-bottom: 1rem !important; /* 讓第一組 (Threshold mode) 和下一組有距離 */
+}
+
+.card select,
+.card input[type="number"],
+.card input[type="text"] {
+  margin-top: 4px !important; 
+}
+
+/* === NIfTI Viewer Labels Above Images === */
+.viewer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 26px; 
+}
+
+.viewer-label-overlay {
+  position: static;            
+  background: #1367bb2f;
+  color: #033b50;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 10px;         
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  pointer-events: none;        
+}
+
+.viewer-canvas {
+  height: 10rem;
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+  background: #000;
+  cursor: crosshair;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.viewer-canvas:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(37,150,190,0.4);
+}
+
+.threshold-group,
+.coord-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: nowrap;
+}
+
+.threshold-item,
+.coord-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.threshold-item label,
+.coord-item label {
+  font-weight: 600;
+  color: #0f3c4c;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.threshold-item select,
+.threshold-item input,
+.coord-item input {
+  width: 90%;
+  border: 1.8px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #1e293b;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.threshold-item select:focus,
+.threshold-item input:focus,
+.coord-item input:focus {
+  outline: none;
+  border-color: #3ba1c5;
+  box-shadow: 0 0 0 3px rgba(59, 161, 197, 0.2);
+}
+
+.viewer-label {
+  font-weight: 600;
+  color: #0f3c4c;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.viewer-canvas {
+  border-radius: 10px;
+  background-color: black;
+}
+
+/* 響應式（小螢幕改直排） */
+@media (max-width: 768px) {
+  .threshold-group,
+  .coord-group {
+    flex-direction: column;
+  }
+  .threshold-item input,
+  .coord-item input {
+    width: 100%;
+  }
+}
+
+.viewer-canvas {
+  border-radius: 12px;
+  background-color: black;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+@media (max-width: 900px) {
+  .viewer-grid {
+    flex-direction: column;
+  }
 }
