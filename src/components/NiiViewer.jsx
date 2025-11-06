@@ -399,7 +399,7 @@ const coord2idx = (c_mm, n, axis) => {
   const nsLabelCls = 'mr-1 text-sm'
 
   return (
-    <div className='flex flex-col gap-3'>
+    <div className='flex flex-col gap-3' style={{ paddingRight: '30px' }}>
       <div className='flex items-center justify-between'>
         <div className='card__title'>NIfTI Viewer</div>
         <div className='flex items-center gap-2 text-sm text-gray-500'>
@@ -409,72 +409,73 @@ const coord2idx = (c_mm, n, axis) => {
 
       {/* --- Threshold mode & value --- */}
       <div className='rounded-xl border p-3 text-sm'>
-        <label className='flex items-center gap-2'>
-          <span>Threshold mode</span>
-          <select value={thrMode} onChange={e=>setThrMode(e.target.value)} className='rounded-lg border px-2 py-1'>
-            <option value='value'>Value</option>
-            <option value='pctl'>Percentile</option>
-          </select>
-        </label>
-        <br />
-        {thrMode === 'value' ? (
-          <>
-            <label className='flex items-center gap-2'>
-              <span>Threshold</span>
-              <input type='number' step='0.01' value={thrValue} onChange={e=>setThrValue(Number(e.target.value))} className='w-28 rounded-lg border px-2 py-1' />
-            </label>
-            <br />
-          </>
-        ) : (
-          <>
-            <label className='flex items-center gap-2'>
-              <span>Percentile</span>
-              <input type='number' min={50} max={99.9} step={0.5} value={pctl} onChange={e=>setPctl(Number(e.target.value)||95)} className='w-24 rounded-lg border px-2 py-1' />
-            </label>
-            <br />
-          </>
-        )}
+        <div className="threshold-group">
+          <div className="threshold-item">
+            <label>Threshold mode</label>
+            <select
+              value={thrMode}
+              onChange={(e) => setThrMode(e.target.value)}
+              className="searchbox"
+            >
+              <option value="value">Value</option>
+              <option value="pctl">Percentile</option>
+            </select>
+          </div>
 
-        {/* Neurosynth-style coordinate inputs (signed, centered at 0) */}
-        <div className='mt-1 flex items-center gap-4'>
-          <label className='flex items-center'>
-            <span className={nsLabelCls}>X (mm):</span>
-            <input
-              type='text' inputMode='decimal' pattern='-?[0-9]*([.][0-9]+)?'
-              className={nsInputCls}
-              value={cx}
-              onChange={e=>setCx(e.target.value)}
-              onBlur={()=>commitCoord('x')}
-              onKeyDown={e=>{ if(e.key==='Enter'){ commitCoord('x') } }}
-              aria-label='X coordinate (centered)'
-            />
-          </label>
-          <label className='flex items-center'>
-            <span className={nsLabelCls}>Y (mm):</span>
-            <input
-              type='text' inputMode='decimal' pattern='-?[0-9]*([.][0-9]+)?'
-              className={nsInputCls}
-              value={cy}
-              onChange={e=>setCy(e.target.value)}
-              onBlur={()=>commitCoord('y')}
-              onKeyDown={e=>{ if(e.key==='Enter'){ commitCoord('y') } }}
-              aria-label='Y coordinate (centered)'
-            />
-          </label>
-          <label className='flex items-center'>
-            <span className={nsLabelCls}>Z (mm):</span>
-            <input
-              type='text' inputMode='decimal' pattern='-?[0-9]*([.][0-9]+)?'
-              className={nsInputCls}
-              value={cz}
-              onChange={e=>setCz(e.target.value)}
-              onBlur={()=>commitCoord('z')}
-              onKeyDown={e=>{ if(e.key==='Enter'){ commitCoord('z') } }}
-              aria-label='Z coordinate (centered)'
-            />
-          </label>
+          {thrMode === 'value' ? (
+            <div className="threshold-item">
+              <label>Threshold</label>
+              <input
+                type="number"
+                step="0.01"
+                value={thrValue}
+                onChange={(e) => setThrValue(Number(e.target.value))}
+                className="searchbox"
+              />
+            </div>
+          ) : (
+            <div className="threshold-item">
+              <label>Percentile</label>
+              <input
+                type="number"
+                min={50}
+                max={99.9}
+                step={0.5}
+                value={pctl}
+                onChange={(e) => setPctl(Number(e.target.value) || 95)}
+                className="searchbox"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* === X / Y / Z inputs === */}
+        <div className="coord-group" style={{ marginTop: '1.5rem' }}>
+          {[
+            { axis: 'X', value: cx, setter: setCx, commit: () => commitCoord('x') },
+            { axis: 'Y', value: cy, setter: setCy, commit: () => commitCoord('y') },
+            { axis: 'Z', value: cz, setter: setCz, commit: () => commitCoord('z') },
+          ].map(({ axis, value, setter, commit }) => (
+            <div key={axis} className="coord-item">
+              <label>{axis} (mm):</label>
+              <input
+                type="text"
+                inputMode="decimal"
+                pattern="-?[0-9]*([.][0-9]+)?"
+                className="searchbox"
+                value={value}
+                onChange={(e) => setter(e.target.value)}
+                onBlur={commit}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') commit()
+                }}
+              />
+            </div>
+          ))}
         </div>
       </div>
+
+
 
       {/* --- Brain views --- */}
       {(loadingBG || loadingMap) && (
@@ -492,13 +493,20 @@ const coord2idx = (c_mm, n, axis) => {
       )}
 
       {!!nx && (
-        <div className='grid grid-cols-3 gap-3' style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}>
+        <div
+          className='grid grid-cols-3 gap-6 mt-4 mb-6'
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 24 }}
+        >
           {sliceConfigs.map(({ key, name, axisLabel, index, setIndex, max, canvasRef }) => (
-            <div key={key} className='flex flex-col gap-2'>
-              <div className='text-xs text-gray-600'>{name} ({axisLabel})</div>
-              <div className='flex items-center gap-2'>
-                <canvas ref={canvasRef} className='h-64 w-full rounded-xl border' onClick={(e)=>onCanvasClick(e, key)} style={{ cursor: 'crosshair' }} />
+            <div key={key} className='viewer-item'>
+              <div className='viewer-label-overlay'>
+                {name} ({axisLabel})
               </div>
+              <canvas
+                ref={canvasRef}
+                onClick={(e)=>onCanvasClick(e, key)}
+                className='viewer-canvas'
+              />
             </div>
           ))}
         </div>
@@ -506,19 +514,73 @@ const coord2idx = (c_mm, n, axis) => {
 
       {/* map generation params */}
       <div className='rounded-xl border p-3 text-sm'>
-        <label className='flex flex-col'>Gaussian FWHM:
-          <input type='number' step='0.5' value={fwhm} onChange={e=>setFwhm(Number(e.target.value)||0)} className='w-28 rounded-lg border px-2 py-1'/>
-          <br />
-        </label>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <label
+            style={{
+              fontWeight: 600,
+              color: '#0f3c4c',
+              fontSize: '1rem',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Gaussian FWHM :
+          </label>
+          <input
+            type="number"
+            step="0.5"
+            value={fwhm}
+            onChange={(e) => setFwhm(Number(e.target.value) || 0)}
+            className="searchbox"
+            style={{
+              width: '120px',
+              textAlign: 'center',
+              display: 'inline-block',  // 🔹 關鍵：防止換行
+            }}
+          />
+        </div>
       </div>
 
       {/* overlay controls */}
-      <div className='rounded-xl border p-3 text-sm'>
-        <label className='flex items-center gap-2'>
-          <span>Overlay alpha</span>
-          <input type='range' min={0} max={1} step={0.05} value={overlayAlpha} onChange={e=>setOverlayAlpha(Number(e.target.value))} className='w-40' />
-        </label>
-        <br />
+      <div className='rounded-xl border p-3 text-sm' style={{ marginTop: '12px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '36px',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <label
+            style={{
+              fontWeight: 600,
+              color: '#0f3c4c',
+              fontSize: '1rem',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Overlay alpha : 
+          </label>
+          <input
+            type='range'
+            min={0}
+            max={1}
+            step={0.05}
+            value={overlayAlpha}
+            onChange={(e) => setOverlayAlpha(Number(e.target.value))}
+            className='searchbox'
+            style={{
+              width: '350px',          // 與 Gaussian FWHM 輸入框完全對齊
+              accentColor: '#1b8fa8',  // 保留品牌色調
+            }}
+          />
+        </div>
       </div>
     </div>
   )

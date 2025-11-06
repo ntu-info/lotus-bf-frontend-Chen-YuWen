@@ -11,39 +11,59 @@ export function QueryBuilder({ query, setQuery }) {
   return (
     <div className="flex flex-col gap-3 qb">
       {/* Header */}
-      <div className="flex items-center">
+      <div className="flex flex-col items-start">
         <div className="card__title">Query Builder</div>
+        <div style={{ fontSize: '14px', color: '#64748b', marginTop: '1px', marginBottom: '8px', lineHeight: '1.4' }}>
+          After entering terms, you can click AND / OR / NOT / ( ) to build your query.<br />
+          <span style={{ display: 'block', marginTop: '4px' }}>The matching studies will be displayed.</span>
+        </div>
       </div>
 
-      {/* Input */}
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Create a query here, e.g.: [-22,-4,18] NOT emotion"
-        className="qb__input w-full rounded-xl border px-3 py-2 focus:outline-none focus:ring"
-       style={{ width: "100%" }}/>
+      <div className="flex items-center gap-2 w-full" style={{ minHeight: '28px' }}>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Create a query here"
+          className="searchbox"
+        />
+        <button
+          onClick={() => setQuery('')}
+          className="rounded-xl border px-4 py-2 text-sm bg-primary-600 text-white hover:bg-primary-700"
+          style={{
+              fontSize: '1.25rem',   
+              fontWeight: 800,       
+              minWidth: '64px',
+          }}
+        >
+          Reset
+        </button>
+      </div>
 
-      {/* Operators + Reset (single row) */}
-      <div className="flex gap-2 flex-nowrap overflow-x-auto">
+
+      {/* Operators row */}
+      <div className="flex justify-center flex-nowrap overflow-x-auto mt-2 mb-2">
         {[
           { label: 'AND', onClick: () => append('AND') },
           { label: 'OR', onClick: () => append('OR') },
           { label: 'NOT', onClick: () => append('NOT') },
           { label: '(', onClick: () => append('(') },
           { label: ')', onClick: () => append(')') },
-          // Reset moved here after ')' per requirement
-          { label: 'Reset', onClick: () => setQuery('') },
         ].map((b) => (
           <button
             key={b.label}
             onClick={b.onClick}
-            className="rounded-xl border px-3 py-2 text-sm hover:bg-gray-50"
+            className="qb-logic-btn rounded-xl border px-5 py-2 text-sm mx-2"
+            style={{
+              fontSize: '3rem',     
+              fontWeight: 700,     
+            }}
           >
             {b.label}
           </button>
         ))}
       </div>
+
 
       {/* Tip (English) */}
       {/*<div className="text-xs text-gray-600">
